@@ -107,7 +107,7 @@ public class MergeSortGeneric {
 
     }
 
-    public static <T extends Comparable<T>> void quickSort (T[] array, int start, int end) {
+    public static <T extends Comparable<T>> void quickSortAnyPartitionLessThenL (T[] array, int start, int end) {
         int pivot, transitionToInsertion = 15;
 
         if (start < end) {
@@ -117,12 +117,12 @@ public class MergeSortGeneric {
             if(pivot - start <= transitionToInsertion ) {
                 InsertionSort.insertionSort(array, start, pivot-1);
             } else {
-                quickSort(array, start, pivot-1);
+                quickSortAnyPartitionLessThenL(array, start, pivot-1);
             }
             if(end - pivot <= transitionToInsertion) {
                 InsertionSort.insertionSort(array,pivot+1, end);
             } else {
-                quickSort(array, pivot+1 , end);
+                quickSortAnyPartitionLessThenL(array, pivot+1 , end);
             }
         }
 
@@ -130,18 +130,51 @@ public class MergeSortGeneric {
 
     private static <T extends Comparable<T>> int partition(T[] array, int startIndex, int endIndex) {
         int pivotIndex = (startIndex + endIndex)/2;
+        int iterator = startIndex;
 
         T pivot = array[pivotIndex];
 
-        while (startIndex <= endIndex) {
-            while (array[startIndex].compareTo(pivot) < 0 ){
+        while (iterator <= endIndex) {
+            if (array[iterator].compareTo(array[pivotIndex]) < 0) {
+                T aux = array[startIndex];
+                array[startIndex] = array[iterator];
+                array[iterator] = aux;
                 startIndex++;
             }
-
-            if (startIndex >= endIndex) return endIndex;
+            iterator++;
         }
+
+        T aux2 = array[startIndex];
+        array[startIndex] = array[pivotIndex];
+        array[pivotIndex] = aux2;
+
+        return startIndex;
 
     }
 
+    public static <T extends Comparable<T>> void quickSortAllPartitionsLessThenL (T[] array, int start, int end) {
+        int pivot, transitionToInsertion = 15;
+
+        if (start < end) {
+            
+            pivot = partition(array, start, end);
+
+            if(pivot - start <= transitionToInsertion && end - pivot <= transitionToInsertion) {
+                InsertionSort.insertionSort(array, start, pivot-1);
+                InsertionSort.insertionSort(array,pivot+1, end);
+            } 
+            if (pivot - start >= transitionToInsertion) {
+                quickSortAllPartitionsLessThenL(array, start, pivot-1);
+            }
+            if (end - pivot >= transitionToInsertion) {
+                quickSortAllPartitionsLessThenL(array, pivot+1 , end);
+
+            }
+            
+        }
+    }
 
 }
+
+
+
