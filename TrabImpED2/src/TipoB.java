@@ -28,6 +28,9 @@ public class TipoB implements Comparable<TipoB> {
         this.value = value;
     }
 
+    public String toString() {
+        return (this.getKey() + ": " + this.getValue());
+    }
 
 
     @Override

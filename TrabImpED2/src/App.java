@@ -58,7 +58,13 @@ public class App {
 
             arrayData = SelectedTypeOfSort.create( optionTypeOfData, optionSizeOfData);
 
-            MergeSortGeneric.chooseMethodType(arrayData, optionSortMethod);
+            arrayData = MergeSortGeneric.chooseMethodType(arrayData, optionSortMethod);
+
+
+            System.out.println("______ARRAY ORDENADO____\n\n");
+            for (int i =0; i < arrayData.length - 1; i++) {
+                System.out.println(arrayData[i].toString());
+            }
         }
 
         input.close();

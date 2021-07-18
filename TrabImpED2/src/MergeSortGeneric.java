@@ -1,11 +1,14 @@
 public class MergeSortGeneric {
 
-    public static <T extends Comparable<T>> void chooseMethodType(T[] array, int method) {
+    public static <T extends Comparable<T>> T[] chooseMethodType(T[] array, int method) {
         
+        
+
         T[] arrayAux = (T[]) new Comparable[array.length];
 
         if (method == 1) {
             mergeSort(array, arrayAux, 0, (array.length-1));
+            
         }
         
         if (method == 2) {
@@ -28,6 +31,7 @@ public class MergeSortGeneric {
             quickSortAllPartitionsLessThenL(array, 0, (array.length-1));
         }
 
+        return array;
         
 
     }
@@ -83,7 +87,7 @@ public class MergeSortGeneric {
         
     }
 
-    public static <T extends Comparable<T>> void mergeWithInsertion (T[] array, T[] arrayAux, int start, int end) {
+    public static <T extends Comparable<T>> T[] mergeWithInsertion (T[] array, T[] arrayAux, int start, int end) {
     
         int sizeForInsertion = 15;
 
@@ -106,9 +110,11 @@ public class MergeSortGeneric {
             merge(array, arrayAux, start, middle+1, end);
         }
 
+        return array;
+
     }
 
-    public static <T extends Comparable<T>> void mergeAlreadySorted (T[] array, T[] arrayAux, int start, int end) {
+    public static <T extends Comparable<T>> T[] mergeAlreadySorted (T[] array, T[] arrayAux, int start, int end) {
         
         
         if (start < end)
@@ -121,10 +127,11 @@ public class MergeSortGeneric {
 
             // merge the sorted halves
             if(array[middle].compareTo(array[middle+1]) <= 0){
-                return;
+                return array;
             }
             merge(array, arrayAux, start, middle+1, end);
         }
+        return array;
 
     }
 

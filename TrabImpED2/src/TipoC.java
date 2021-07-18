@@ -26,6 +26,10 @@ public class TipoC implements Comparable<TipoC> {
         this.value = value;
     }
 
+    public String toString() {
+        return (this.getKey() + ": " + this.getValue());
+    }
+
     @Override
     public int compareTo (TipoC elm) {
         return this.getKey() - (elm.getKey());

@@ -28,6 +28,10 @@ public class TipoA implements Comparable<TipoA> {
         this.value = value;
     }
 
+    public String toString() {
+        return (this.getKey() + ": " + this.getValue());
+    }
+
     @Override
     public int compareTo (TipoA elm) {
         return this.getKey().compareTo(elm.getKey());

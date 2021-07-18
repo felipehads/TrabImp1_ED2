@@ -1,14 +1,15 @@
 import java.io.File;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class SelectedTypeOfSort {
-
+    
+    private static final int small = 50;
+    private static final int medium = 50000;
+    private static final int big = 300000;
 
     public static <T extends Comparable<T>> T[] create(int type, int size) {
 
-        int small = 50;
-        int medium = 50000;
-        int big = 300000;
         int sizeOfIntArrayInTypeC = 30;
 
         if(size == 1) size = small;
@@ -47,8 +48,8 @@ public class SelectedTypeOfSort {
 
             try {
 
-                inputData = new Scanner(inputDataFile);
-                
+                inputData = new Scanner(inputDataFile).useDelimiter("\\,|\\n");
+                inputData.useLocale(Locale.US);
                 int sizeIndex = 0;
 
                 try {
@@ -59,22 +60,22 @@ public class SelectedTypeOfSort {
                             Double value = inputData.nextDouble();
                             selectedElements[sizeIndex] = (T) new TipoA(key, value);
                         }
-                        if (type == 2) {
+                        else if (type == 2) {
                             Double key = inputData.nextDouble();
                             String value = inputData.next();
                             selectedElements[sizeIndex] = (T) new TipoB(key, value);
                         }
-                        if (type == 3) {
+                        else {
                             int key = inputData.nextInt();
                             int[] value = new int[sizeOfIntArrayInTypeC];
                             for (int i = 0; i < sizeOfIntArrayInTypeC; i++) {
-                                value[sizeOfIntArrayInTypeC] = inputData.nextInt();
+                                value[i] = inputData.nextInt();
                             }
                             selectedElements[sizeIndex] =  (T) new TipoC(key, value);
                         }
                         sizeIndex++;
                     }
-
+                    inputData.close();
                     return selectedElements;
                 } catch(Exception e) {
                     e.printStackTrace();
