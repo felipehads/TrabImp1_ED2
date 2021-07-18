@@ -1,7 +1,39 @@
 public class MergeSortGeneric {
+
+    public static <T extends Comparable<T>> void chooseMethodType(T[] array, int method) {
+        
+        T[] arrayAux = (T[]) new Comparable[array.length];
+
+        if (method == 1) {
+            mergeSort(array, arrayAux, 0, (array.length-1));
+        }
+        
+        if (method == 2) {
+            mergeWithInsertion(array, arrayAux, 0, (array.length-1));
+        }
+
+        if (method == 3) {
+            mergeAlreadySorted(array, arrayAux, 0, (array.length-1));
+        }
+
+        if (method == 4) {
+            mergeSortWithNoCopy(array, arrayAux, 0, (array.length-1));
+        }
+
+        if (method == 5) {
+            quickSortAnyPartitionLessThenL(array, 0, (array.length-1));
+        }
+
+        if (method == 6) {
+            quickSortAllPartitionsLessThenL(array, 0, (array.length-1));
+        }
+
+        
+
+    }
     
     // main function that sorts array[start..end] using merge()
-    public static <T extends Comparable<T>> void mergeSort(T[] array, int start, int end)
+    public static <T extends Comparable<T>> T[] mergeSort(T[] array, T[] arrayAux, int start, int end)
     {
         // base case
         if (start < end)
@@ -9,60 +41,49 @@ public class MergeSortGeneric {
             // find the middle point
             int middle = (start + end) / 2;
 
-            mergeSort(array, start, middle); // sort first half
-            mergeSort(array, middle + 1, end);  // sort second half
+            mergeSort(array, arrayAux, start, middle); // sort first half
+            mergeSort(array, arrayAux, middle + 1, end);  // sort second half
 
             // merge the sorted halves
-            merge(array, start, middle, end);
+            merge(array, arrayAux, start, middle+1, end);
         }
+
+        return array;
+
     }
 
     // merges two subarrays of array[].
-    private static <T extends Comparable<T>> void merge(T[] array, int start, int middle, int end)
+    private static <T extends Comparable<T>> void merge(T[] array, T[] arrayAux, int leftIndex, int rightIndex, int end)
     {
-        T[] leftArray  = (T[]) new Comparable[middle - start + 1];
-        T[] rightArray = (T[]) new Comparable[end - middle];
+        int leftEnd = rightIndex - 1;
+        int auxIndex = leftIndex;
+        int arraySize = end - leftIndex + 1;
 
-        // fill in left array
-        for (int i = 0; i < leftArray.length; ++i)
-            leftArray[i] = array[start + i];
 
-        // fill in right array
-        for (int i = 0; i < rightArray.length; ++i)
-            rightArray[i] = array[middle + 1 + i];
+        while (leftIndex <= leftEnd && rightIndex <= end) {
 
-        /* Merge the temp arrays */
-
-        // initial indexes of first and second subarrays
-        int leftIndex = 0, rightIndex = 0;
-
-        // the index we will start at when adding the subarrays back into the main array
-        int currentIndex = start;
-
-        // compare each index of the subarrays adding the lowest value to the currentIndex
-        while (leftIndex < leftArray.length && rightIndex < rightArray.length)
-        {
-            if (leftArray[leftIndex].compareTo(rightArray[rightIndex]) <= 0)
-            {
-                array[currentIndex] = leftArray[leftIndex];
-                leftIndex++;
+            if(array[leftIndex].compareTo(array[rightIndex]) <= 0) {
+                arrayAux[auxIndex++] = array[leftIndex++];
+            } else {
+                arrayAux[auxIndex++] = array[rightIndex++];
             }
-            else
-            {
-                array[currentIndex] = rightArray[rightIndex];
-                rightIndex++;
-            }
-            currentIndex++;
         }
 
-        // copy remaining elements of leftArray[] if any
-        while (leftIndex < leftArray.length) array[currentIndex++] = leftArray[leftIndex++];
+        while (leftIndex <= leftEnd) {
+            arrayAux[auxIndex++] = array[leftIndex++];
+        }
 
-        // copy remaining elements of rightArray[] if any
-        while (rightIndex < rightArray.length) array[currentIndex++] = rightArray[rightIndex++];
+        while (rightIndex <= end) {
+            arrayAux[auxIndex++] = array[rightIndex++];
+        }
+
+        for (int i = 0; i < arraySize; i++, end--) {
+            array[end] = arrayAux[end];
+        }
+        
     }
 
-    public static <T extends Comparable<T>> void mergeWithInsertion (T[] array, int start, int end) {
+    public static <T extends Comparable<T>> void mergeWithInsertion (T[] array, T[] arrayAux, int start, int end) {
     
         int sizeForInsertion = 15;
 
@@ -78,16 +99,16 @@ public class MergeSortGeneric {
             // find the middle point
             int middle = (start + end) / 2;
 
-            mergeSort(array, start, middle); // sort first half
-            mergeSort(array, middle + 1, end);  // sort second half
+            mergeWithInsertion(array, arrayAux, start, middle); // sort first half
+            mergeWithInsertion(array, arrayAux, middle + 1, end);  // sort second half
 
             // merge the sorted halves
-            merge(array, start, middle, end);
+            merge(array, arrayAux, start, middle+1, end);
         }
 
     }
 
-    public static <T extends Comparable<T>> void mergeAlreadySorted (T[] array, int start, int end) {
+    public static <T extends Comparable<T>> void mergeAlreadySorted (T[] array, T[] arrayAux, int start, int end) {
         
         
         if (start < end)
@@ -95,17 +116,67 @@ public class MergeSortGeneric {
             // find the middle point
             int middle = (start + end) / 2;
 
-            mergeAlreadySorted(array, start, middle); // sort first half
-            mergeAlreadySorted(array, middle + 1, end);  // sort second half
+            mergeAlreadySorted(array, arrayAux, start, middle); // sort first half
+            mergeAlreadySorted(array, arrayAux, middle + 1, end);  // sort second half
 
             // merge the sorted halves
             if(array[middle].compareTo(array[middle+1]) <= 0){
                 return;
             }
-            merge(array, start, middle, end);
+            merge(array, arrayAux, start, middle+1, end);
         }
 
     }
+
+    public static <T extends Comparable<T>> T[] mergeSortWithNoCopy(T[] array, T[] arrayAux, int start, int end)
+    {
+
+
+        // base case
+        if (start < end)
+        {
+            // find the middle point
+            int middle = (start + end) / 2;
+
+            mergeSortWithNoCopy(array, arrayAux, start, middle); // sort first half
+            mergeSortWithNoCopy(array, arrayAux, middle + 1, end);  // sort second half
+
+            // merge the sorted halves
+            mergeWithNoCopy(array, arrayAux, start, middle+1, end);
+            mergeWithNoCopy(arrayAux, array, start, middle+1, end);
+        }
+        
+        return arrayAux;
+        
+    }
+    
+    // merges two subarrays of array[].
+    private static <T extends Comparable<T>> void mergeWithNoCopy(T[] array, T[] arrayAux, int leftIndex, int rightIndex, int end)
+    {
+        int leftEnd = rightIndex - 1;
+        int auxIndex = leftIndex;
+        
+        
+        while (leftIndex <= leftEnd && rightIndex <= end) {
+            
+            if(array[leftIndex].compareTo(array[rightIndex]) <= 0) {
+                arrayAux[auxIndex++] = array[leftIndex++];
+            } else {
+                arrayAux[auxIndex++] = array[rightIndex++];
+            }
+        }
+        
+        while (leftIndex <= leftEnd) {
+            arrayAux[auxIndex++] = array[leftIndex++];
+        }
+        
+        while (rightIndex <= end) {
+            arrayAux[auxIndex++] = array[rightIndex++];
+        }
+        
+        
+    }
+
 
     public static <T extends Comparable<T>> void quickSortAnyPartitionLessThenL (T[] array, int start, int end) {
         int pivot, transitionToInsertion = 15;
@@ -132,7 +203,7 @@ public class MergeSortGeneric {
         int pivotIndex = (startIndex + endIndex)/2;
         int iterator = startIndex;
 
-        T pivot = array[pivotIndex];
+        // T pivot = array[pivotIndex];
 
         while (iterator <= endIndex) {
             if (array[iterator].compareTo(array[pivotIndex]) < 0) {

@@ -1,34 +1,34 @@
-public class TipoC {
+public class TipoC implements Comparable<TipoC> {
     
-    private Integer key;
-    private Integer[] value;
+    private int key;
+    private int[] value;
 
     //constructor
-    public TipoC(Integer key, Integer[] value) {
+    public TipoC(int key, int[] value) {
         this.key = key;
         this.value = value;
     }
 
 
-    public Integer getKey() {
+    public int getKey() {
         return key;
     }
 
-    public Integer[] getValue() {
+    public int[] getValue() {
         return value;
     }
 
-    public void setKey(Integer key) {
+    public void setKey(int key) {
         this.key = key;
     }
 
-    public void setValue(Integer[] value) {
+    public void setValue(int[] value) {
         this.value = value;
     }
 
-
+    @Override
     public int compareTo (TipoC elm) {
-        return this.getKey().compareTo(elm.getKey());
+        return this.getKey() - (elm.getKey());
     }
     
 }

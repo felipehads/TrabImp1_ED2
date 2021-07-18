@@ -1,4 +1,4 @@
-public class TipoB {
+public class TipoB implements Comparable<TipoB> {
     
     private Double key;
     private String value;
@@ -30,7 +30,7 @@ public class TipoB {
 
 
 
-
+    @Override
     public int compareTo (TipoB elm) {
         return this.getKey().compareTo(elm.getKey());
     }
